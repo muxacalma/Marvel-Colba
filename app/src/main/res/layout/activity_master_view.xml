@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".Activities.Master.MasterView">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comicList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
