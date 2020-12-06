@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Marvel ft Colba</string>
+    <string name="private_api_key">7c7820192702a4231544cadfb96ffe944f107029</string>
+    <string name="public_api_key">4ee29e2f53378663cc860b895d0c388b</string>
 </resources>
