@@ -39,6 +39,8 @@ public class MasterModel {
     }
 
     public void getComics(){
+        if (presenter.comicCount == 0)
+            presenter.addLoading();
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = apiHelper.BASE + apiHelper.GET_COMICS + apiHelper.authParams(PAGE_SIZE, presenter.comicCount);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -70,9 +72,9 @@ public class MasterModel {
 
                                     comics.add(comicDTO);
                                 }
+                                presenter.removeLoading();
+                                //if (presenter.comicCount != 0)
 
-                                if (presenter.comicCount != 0)
-                                    presenter.removeLoading();
                                 presenter.loadComics(comics);
                                 if (presenter.comicCount < presenter.totalComics && presenter.comicCount > 0) {
                                     presenter.addLoading();
