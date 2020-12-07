@@ -19,6 +19,7 @@ public class MasterPresenter {
     public int totalPage = -1;
     public boolean isLoading = false;
     public int comicCount = 0;
+    public int totalComics = 0;
 
     public MasterPresenter(Context context, MasterView view){
         this.context = context;
@@ -39,5 +40,13 @@ public class MasterPresenter {
         isLoading = true;
         currentPage++;
         getComics();
+    }
+
+    public void removeLoading(){
+        view.removeLoading();
+    }
+
+    public void addLoading(){
+        view.addLoading();
     }
 }

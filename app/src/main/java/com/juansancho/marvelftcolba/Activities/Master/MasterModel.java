@@ -3,6 +3,7 @@ package com.juansancho.marvelftcolba.Activities.Master;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.juansancho.marvelftcolba.Global.PaginationListener.PAGE_SIZE;
+import static com.juansancho.marvelftcolba.Global.PaginationListener.PAGE_START;
 
 public class MasterModel {
 
@@ -38,10 +40,7 @@ public class MasterModel {
 
     public void getComics(){
         RequestQueue queue = Volley.newRequestQueue(context);
-        Log.d("COUNT", presenter.comicCount + "");
-
         String url = apiHelper.BASE + apiHelper.FETCH_CHARACTERS + apiHelper.authParams(PAGE_SIZE, presenter.comicCount);
-        Log.d("URL", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -50,6 +49,9 @@ public class MasterModel {
                         try{
                             JSONObject jsonObject = new JSONObject(response);
                             JSONObject data = jsonObject.getJSONObject("data");
+                            if(presenter.totalComics == 0)
+                                presenter.totalComics = data.getInt("total");
+
                             JSONArray results = data.getJSONArray("results");
                             if(results.length() > 0){
                                 comics = new ArrayList<>();
@@ -66,7 +68,17 @@ public class MasterModel {
 
                                     comics.add(comicDTO);
                                 }
+
+                                if (presenter.comicCount != 0)
+                                    presenter.removeLoading();
                                 presenter.loadComics(comics);
+                                if (presenter.comicCount < presenter.totalComics && presenter.comicCount > 0) {
+                                    presenter.addLoading();
+                                } else {
+                                    presenter.isLastPage = true;
+                                }
+                                presenter.isLoading = false;
+
                             }
                         }
                         catch (JSONException e){
@@ -79,6 +91,10 @@ public class MasterModel {
                 Log.d("Error", error.toString());
             }
         });
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                3000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(stringRequest);
     }
 }

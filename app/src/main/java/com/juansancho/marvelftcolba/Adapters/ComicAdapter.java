@@ -7,12 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import com.juansancho.marvelftcolba.Activities.Master.MasterView;
 import com.juansancho.marvelftcolba.DTO.comicDTO;
@@ -22,7 +21,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder> {
+public class ComicAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+
+    private static final int VIEW_TYPE_LOADING = 0;
+    private static final int VIEW_TYPE_NORMAL = 1;
+    private boolean isLoaderVisible = false;
 
     ArrayList<comicDTO> comics;
     Context context;
@@ -36,19 +39,37 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
 
     @NonNull
     @Override
-    public ComicAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_comic, null, false);
-            return new ComicAdapter.MyViewHolder(v, activity);
-            }
+    public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        switch (i) {
+            case VIEW_TYPE_NORMAL:
+
+                return new MyViewHolder(
+                        LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_comic, viewGroup, false));
+            case VIEW_TYPE_LOADING:
+                return new ProgressHolder(
+                        LayoutInflater.from(context).inflate(R.layout.item_loading, viewGroup, false));
+            default:
+                return null;
+        }
+    }
 
     @Override
-    public void onBindViewHolder(@NonNull ComicAdapter.MyViewHolder myViewHolder, int i) {
-            myViewHolder.asignarValores(comics.get(i));
-            }
+    public void onBindViewHolder(@NonNull BaseViewHolder holder, int position) {
+        holder.onBind(position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (isLoaderVisible) {
+            return position == comics.size() - 1 ? VIEW_TYPE_LOADING : VIEW_TYPE_NORMAL;
+        } else {
+            return VIEW_TYPE_NORMAL;
+        }
+    }
 
     @Override
     public int getItemCount() {
-        return comics.size();
+        return comics == null ? 0 : comics.size();
     }
 
     public void addItems(List<comicDTO> comics) {
@@ -57,20 +78,60 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
         ((MasterView) activity).updateListSize(this.comics.size());
     }
 
-public class MyViewHolder extends RecyclerView.ViewHolder {
-
-    ImageView thumb;
-    TextView title;
-
-    public MyViewHolder(@NonNull final View itemView, final Activity act) {
-        super(itemView);
-        thumb = itemView.findViewById(R.id.thumb);
-        title = itemView.findViewById(R.id.title);
+    public void addLoading() {
+        isLoaderVisible = true;
+        comics.add(new comicDTO());
+        notifyItemInserted(comics.size() - 1);
+    }
+    public void removeLoading() {
+        isLoaderVisible = false;
+        int position = comics.size() - 1;
+        comicDTO comic = getItem(position);
+        if (comic != null) {
+            comics.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+    public void clear() {
+        comics.clear();
+        notifyDataSetChanged();
+    }
+    comicDTO getItem(int position) {
+        return comics.get(position);
     }
 
-    public void asignarValores(comicDTO comic) {
-        title.setText(comic.title);
-        Picasso.get().load(comic.thumbPath).into(thumb);
+
+    public class MyViewHolder extends BaseViewHolder {
+
+        ImageView thumb;
+        TextView title;
+
+        public MyViewHolder(View inflate) {
+            super(inflate);
+        }
+
+        @Override
+        protected void clear() {}
+
+        @Override
+        public void onBind(int position) {
+            super.onBind(position);
+            comicDTO comicDTO = comics.get(position);
+            thumb = itemView.findViewById(R.id.thumb);
+            title = itemView.findViewById(R.id.title);
+            title.setText(comicDTO.title);
+            Picasso.get().load(comicDTO.thumbPath).into(thumb);
+        }
     }
-}
+
+    public class ProgressHolder extends BaseViewHolder {
+        ProgressHolder(View itemView) {
+            super(itemView);
+        }
+
+        @Override
+        protected void clear() {
+
+        }
+    }
 }

@@ -64,4 +64,12 @@ public class MasterView extends AppCompatActivity {
     public void updateListSize(int i){
         presenter.comicCount = i;
     }
+
+    public void removeLoading(){
+        mAdapter.removeLoading();
+    }
+
+    public void addLoading(){
+        mAdapter.addLoading();
+    }
 }
