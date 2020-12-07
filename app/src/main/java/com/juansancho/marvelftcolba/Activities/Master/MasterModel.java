@@ -73,7 +73,6 @@ public class MasterModel {
                                     comics.add(comicDTO);
                                 }
                                 presenter.removeLoading();
-                                //if (presenter.comicCount != 0)
 
                                 presenter.loadComics(comics);
                                 if (presenter.comicCount < presenter.totalComics && presenter.comicCount > 0) {

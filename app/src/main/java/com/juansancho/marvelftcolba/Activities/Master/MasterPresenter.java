@@ -62,4 +62,12 @@ public class MasterPresenter {
         isLoading = false;
         removeLoading();
     }
+
+    public void refresh(){
+        comicCount = 0;
+        currentPage = PAGE_START;
+        isLastPage = false;
+        view.clearAdapter();
+        getComics();
+    }
 }

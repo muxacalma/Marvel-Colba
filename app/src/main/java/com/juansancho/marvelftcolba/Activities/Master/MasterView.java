@@ -3,6 +3,7 @@ package com.juansancho.marvelftcolba.Activities.Master;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 
@@ -14,11 +15,12 @@ import com.juansancho.marvelftcolba.R;
 
 import java.util.ArrayList;
 
-public class MasterView extends AppCompatActivity {
+public class MasterView extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     private MasterPresenter presenter;
 
     private ArrayList<comicDTO> comics;
+    SwipeRefreshLayout swipeRefresh;
     private RecyclerView comicList;
     private ComicAdapter mAdapter;
     private GridLayoutManager layoutManager;
@@ -29,6 +31,7 @@ public class MasterView extends AppCompatActivity {
         setContentView(R.layout.activity_master_view);
 
         findViews();
+        swipeRefresh.setOnRefreshListener(this);
         layoutManager = new GridLayoutManager(this, 1);
         comicList.setLayoutManager(layoutManager);
         mAdapter = new ComicAdapter(this, new ArrayList<>(), this);
@@ -55,6 +58,7 @@ public class MasterView extends AppCompatActivity {
     }
 
     private void findViews(){
+        swipeRefresh = findViewById(R.id.swipeRefresh);
         comicList = findViewById(R.id.comicList);
     }
 
@@ -80,5 +84,15 @@ public class MasterView extends AppCompatActivity {
 
     public void setError(String s){
         Snackbar.make(comicList, s, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void clearAdapter(){
+        mAdapter.clear();
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefresh.setRefreshing(false);
+        presenter.refresh();
     }
 }
