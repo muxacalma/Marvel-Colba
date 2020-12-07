@@ -1,7 +1,9 @@
 package com.juansancho.marvelftcolba.Activities.Master;
 
 import android.content.Context;
+import android.content.Intent;
 
+import com.juansancho.marvelftcolba.Activities.Detail.DetailView;
 import com.juansancho.marvelftcolba.DTO.comicDTO;
 
 import java.util.ArrayList;
@@ -48,5 +50,11 @@ public class MasterPresenter {
 
     public void addLoading(){
         view.addLoading();
+    }
+
+    public void showDetail(int id){
+        Intent intent = new Intent(context, DetailView.class);
+        intent.putExtra("comicID", id);
+        context.startActivity(intent);
     }
 }

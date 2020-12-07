@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.juansancho.marvelftcolba.Global.PaginationListener.PAGE_SIZE;
-import static com.juansancho.marvelftcolba.Global.PaginationListener.PAGE_START;
 
 public class MasterModel {
 
@@ -40,7 +39,7 @@ public class MasterModel {
 
     public void getComics(){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = apiHelper.BASE + apiHelper.FETCH_CHARACTERS + apiHelper.authParams(PAGE_SIZE, presenter.comicCount);
+        String url = apiHelper.BASE + apiHelper.GET_COMICS + apiHelper.authParams(PAGE_SIZE, presenter.comicCount);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -57,12 +56,14 @@ public class MasterModel {
                                 comics = new ArrayList<>();
                                 for(int i=0; i<results.length(); i++){
                                     JSONObject current = results.getJSONObject(i);
+                                    int id = current.getInt("id");
                                     String title = current.getString("title");
                                     JSONObject thumbnail = current.getJSONObject("thumbnail");
                                     String thumbnailPath = thumbnail.getString("path");
                                     String thumbnailExt = thumbnail.getString("extension");
 
                                     comicDTO comicDTO = new comicDTO();
+                                    comicDTO.id = id;
                                     comicDTO.title = title;
                                     comicDTO.thumbPath = thumbnailPath + "/" + context.getResources().getString(R.string.thumbnailSize) + "." + thumbnailExt;
 

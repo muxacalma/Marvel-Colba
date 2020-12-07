@@ -10,7 +10,8 @@ import java.security.NoSuchAlgorithmException;
 public class APIHelper {
 
     public static final String BASE = "https://gateway.marvel.com";
-    public static final String FETCH_CHARACTERS = "/v1/public/characters/1009220/comics";
+    public static final String GET_COMICS = "/v1/public/characters/1009220/comics";
+    public static final String GET_COMIC = "/v1/public/comics/";
 
     private static Context context;
 

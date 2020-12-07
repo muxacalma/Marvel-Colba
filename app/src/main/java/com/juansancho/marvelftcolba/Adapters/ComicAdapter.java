@@ -2,6 +2,7 @@ package com.juansancho.marvelftcolba.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
+import com.google.android.material.card.MaterialCardView;
 import com.juansancho.marvelftcolba.Activities.Master.MasterView;
 import com.juansancho.marvelftcolba.DTO.comicDTO;
 import com.juansancho.marvelftcolba.R;
@@ -105,6 +108,7 @@ public class ComicAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
         ImageView thumb;
         TextView title;
+        MaterialCardView card;
 
         public MyViewHolder(View inflate) {
             super(inflate);
@@ -117,10 +121,18 @@ public class ComicAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         public void onBind(int position) {
             super.onBind(position);
             comicDTO comicDTO = comics.get(position);
+            card = itemView.findViewById(R.id.comicCard);
             thumb = itemView.findViewById(R.id.thumb);
             title = itemView.findViewById(R.id.title);
             title.setText(comicDTO.title);
             Picasso.get().load(comicDTO.thumbPath).into(thumb);
+
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MasterView) context).showDetail(comicDTO.id);
+                }
+            });
         }
     }
 

@@ -72,4 +72,8 @@ public class MasterView extends AppCompatActivity {
     public void addLoading(){
         mAdapter.addLoading();
     }
+
+    public void showDetail(int id){
+        presenter.showDetail(id);
+    }
 }
