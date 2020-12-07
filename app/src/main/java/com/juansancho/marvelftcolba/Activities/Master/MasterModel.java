@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.snackbar.Snackbar;
 import com.juansancho.marvelftcolba.DTO.comicDTO;
 import com.juansancho.marvelftcolba.Global.APIHelper;
 import com.juansancho.marvelftcolba.R;
@@ -90,6 +91,8 @@ public class MasterModel {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d("Error", error.toString());
+                presenter.removeLoading();
+                presenter.setError(context.getResources().getString(R.string.error) + " " + error.toString());
             }
         });
         stringRequest.setRetryPolicy(new DefaultRetryPolicy(

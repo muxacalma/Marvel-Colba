@@ -18,7 +18,6 @@ public class MasterPresenter {
 
     public int currentPage = PAGE_START;
     public boolean isLastPage = false;
-    public int totalPage = -1;
     public boolean isLoading = false;
     public int comicCount = 0;
     public int totalComics = 0;
@@ -52,9 +51,15 @@ public class MasterPresenter {
         view.addLoading();
     }
 
-    public void showDetail(int id){
+    public void showDetail(comicDTO comic){
         Intent intent = new Intent(context, DetailView.class);
-        intent.putExtra("comicID", id);
+        intent.putExtra("comic", comic);
         context.startActivity(intent);
+    }
+
+    public void setError(String s){
+        view.setError(s);
+        isLoading = false;
+        removeLoading();
     }
 }

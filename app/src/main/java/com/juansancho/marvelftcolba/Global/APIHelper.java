@@ -32,6 +32,14 @@ public class APIHelper {
         return s;
     }
 
+    public static String authParams(){
+        String ts = ts();
+        String s = "?ts=" + ts;
+        s += "&apikey=" + context.getResources().getString(R.string.public_api_key);
+        s += "&hash=" + md5(ts + context.getResources().getString(R.string.private_api_key) + context.getResources().getString(R.string.public_api_key));
+        return s;
+    }
+
     /**
      *
      * @param s

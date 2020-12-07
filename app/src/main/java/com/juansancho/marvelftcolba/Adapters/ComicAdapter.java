@@ -130,7 +130,7 @@ public class ComicAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MasterView) context).showDetail(comicDTO.id);
+                    ((MasterView) context).showDetail(comicDTO);
                 }
             });
         }

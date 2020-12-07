@@ -1,6 +1,8 @@
 package com.juansancho.marvelftcolba.DTO;
 
-public class comicDTO {
+import java.io.Serializable;
+
+public class comicDTO implements Serializable {
 
     public int id;
     public String title;

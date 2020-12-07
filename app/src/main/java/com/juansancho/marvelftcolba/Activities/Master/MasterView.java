@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.juansancho.marvelftcolba.Adapters.ComicAdapter;
 import com.juansancho.marvelftcolba.DTO.comicDTO;
 import com.juansancho.marvelftcolba.Global.PaginationListener;
@@ -73,7 +74,11 @@ public class MasterView extends AppCompatActivity {
         mAdapter.addLoading();
     }
 
-    public void showDetail(int id){
-        presenter.showDetail(id);
+    public void showDetail(comicDTO comic){
+        presenter.showDetail(comic);
+    }
+
+    public void setError(String s){
+        Snackbar.make(comicList, s, Snackbar.LENGTH_SHORT).show();
     }
 }
