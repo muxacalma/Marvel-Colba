@@ -21,12 +21,13 @@ public class APIHelper {
     /**
      * @return ?ts={ts}&apikey={apikey}&hash={hash}
      */
-    public static String authParams(){
+    public static String authParams(int limit, int offset){
         String ts = ts();
         String s = "?ts=" + ts;
         s += "&apikey=" + context.getResources().getString(R.string.public_api_key);
         s += "&hash=" + md5(ts + context.getResources().getString(R.string.private_api_key) + context.getResources().getString(R.string.public_api_key));
-
+        s += "&limit=" + limit;
+        s += "&offset=" + offset;
         return s;
     }
 

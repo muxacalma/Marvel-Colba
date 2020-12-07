@@ -19,6 +19,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.juansancho.marvelftcolba.Global.PaginationListener.PAGE_SIZE;
+
 public class MasterModel {
 
     private Context context;
@@ -32,13 +34,14 @@ public class MasterModel {
         this.context = context;
         this.presenter = presenter;
         apiHelper = new APIHelper(context);
-        comics = new ArrayList<>();
     }
 
     public void getComics(){
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = apiHelper.BASE + apiHelper.FETCH_CHARACTERS + apiHelper.authParams();
+        Log.d("COUNT", presenter.comicCount + "");
 
+        String url = apiHelper.BASE + apiHelper.FETCH_CHARACTERS + apiHelper.authParams(PAGE_SIZE, presenter.comicCount);
+        Log.d("URL", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -49,6 +52,7 @@ public class MasterModel {
                             JSONObject data = jsonObject.getJSONObject("data");
                             JSONArray results = data.getJSONArray("results");
                             if(results.length() > 0){
+                                comics = new ArrayList<>();
                                 for(int i=0; i<results.length(); i++){
                                     JSONObject current = results.getJSONObject(i);
                                     String title = current.getString("title");

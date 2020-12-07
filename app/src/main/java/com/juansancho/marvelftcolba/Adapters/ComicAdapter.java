@@ -14,40 +14,48 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.juansancho.marvelftcolba.Activities.Master.MasterView;
 import com.juansancho.marvelftcolba.DTO.comicDTO;
 import com.juansancho.marvelftcolba.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder> {
 
-        ArrayList<comicDTO> comics;
-        Context context;
-        Activity activity;
+    ArrayList<comicDTO> comics;
+    Context context;
+    Activity activity;
 
-public ComicAdapter(Context context, ArrayList<comicDTO> comics, Activity activity) {
-        this.comics = comics;
-        this.context = context;
-        this.activity = activity;
-        }
+    public ComicAdapter(Context context, ArrayList<comicDTO> comics, Activity activity) {
+            this.comics = comics;
+            this.context = context;
+            this.activity = activity;
+            }
 
-@NonNull
-@Override
-public ComicAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_comic, null, false);
-        return new ComicAdapter.MyViewHolder(v, activity);
-        }
+    @NonNull
+    @Override
+    public ComicAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_comic, null, false);
+            return new ComicAdapter.MyViewHolder(v, activity);
+            }
 
-@Override
-public void onBindViewHolder(@NonNull ComicAdapter.MyViewHolder myViewHolder, int i) {
-        myViewHolder.asignarValores(comics.get(i));
-        }
+    @Override
+    public void onBindViewHolder(@NonNull ComicAdapter.MyViewHolder myViewHolder, int i) {
+            myViewHolder.asignarValores(comics.get(i));
+            }
 
-@Override
-public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return comics.size();
-        }
+    }
+
+    public void addItems(List<comicDTO> comics) {
+        this.comics.addAll(comics);
+        notifyDataSetChanged();
+        ((MasterView) activity).updateListSize(this.comics.size());
+    }
 
 public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -58,12 +66,10 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         thumb = itemView.findViewById(R.id.thumb);
         title = itemView.findViewById(R.id.title);
-
     }
 
     public void asignarValores(comicDTO comic) {
         title.setText(comic.title);
-        Log.d("URL", comic.thumbPath);
         Picasso.get().load(comic.thumbPath).into(thumb);
     }
 }
